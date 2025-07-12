@@ -14,7 +14,7 @@ AboutScreen::AboutScreen()
 {
     text_.setFont(Game::GlobalFont);
     text_.setString(
-        sf::String(L"这是2025年夏季上海交通大学大学面向对象程序设计实践课程大作业\n\n");
+        sf::String(L"这是2025年夏季上海交通大学大学面向对象程序设计实践课程大作业\n\n"));
     text_.setCharacterSize(Game::GlobalVideoMode.width / 35.0f);
     text_.setFillColor(Game::Color::Green);
     setOriginMiddle(text_);
