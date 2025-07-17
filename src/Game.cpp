@@ -18,7 +18,9 @@ const sf::Color Game::Color::Yellow =
 const sf::Color Game::Color::Green =
     sf::Color(0x2ecc71ff);
 const sf::Color Game::Color::Red =
-    sf::Color(0xe74c3cff);        
+    sf::Color(0xe74c3cff);     
+const sf::Color Game::Color::Orange =
+    sf::Color(0xcf871dff);          
 const sf::Color Game::Color::Background[] =
     {
         sf::Color(0xeaeaeaee), // White
@@ -36,10 +38,11 @@ const sf::Color Game::Color::NotSeleted =
 const sf::Color Game::Color::Fruit[] =
     {
         sf::Color(0x212f3dff), // Black
-        sf::Color(0x935116ff), // Brown
+        sf::Color(0xf1c40fff), // Yellow
         sf::Color(0xe74c3cff), // Red
         sf::Color(0x5dade2ff), // Blue
-        sf::Color(0x2ecc71ff)  // Green
+        sf::Color(0x9b59b6ff), // purple
+        sf::Color(0xfbfbfbaa)  // white      
 };
 
 /* static Golbal VideoMode settings
@@ -106,14 +109,14 @@ Game::Game()
 {
     window_.create(
         GlobalVideoMode,   // videoMode
-        "sfSnakePro",      // window name
+        "Snake-vs-Food",      // window name
         sf::Style::Close); // window Style
     sf::Image icon;
-    icon.loadFromFile("assets/image/favicon.png");
+    icon.loadFromFile("assets/image/gameicon.png");
     window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
-    bgMusic_.openFromFile("assets/music/Roa - Bloom.wav");
-    bgMusic_.setVolume(30);
+    bgMusic_.openFromFile("assets/music/bgm.wav");
+    bgMusic_.setVolume(15);
     bgMusic_.setLoop(true);
     bgMusic_.play();
 }

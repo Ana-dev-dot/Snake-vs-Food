@@ -6,6 +6,8 @@
 #include <vector>
 #include <deque>
 
+#include "Bullet.h"
+
 #include "Fruit.h"
 
 namespace sfSnake
@@ -22,6 +24,10 @@ namespace sfSnake
         void update(sf::Time delta);
         void render(sf::RenderWindow &window);
 
+        // 子弹相关
+        void fireBullet();
+        const std::vector<Bullet>& getBullets() const { return bullets_; }
+
         void checkFruitCollisions(std::deque<Fruit> &fruits);
 
         bool hitSelf() const;
@@ -30,11 +36,16 @@ namespace sfSnake
 
         void printhead() const;
         unsigned int getHp() const;
-        
+        void reduceHp(unsigned int damage) { if (hp_ > damage) hp_ -= damage; else hp_ = 0; }
+        float getNodeRadius() const { return nodeRadius_; }
+        sf::Vector2f getHeadPosition() const { return toWindow(path_.front()); }
+    public:
+        void grow(int score);
+
     private:
         void initNodes();
 
-        void grow(int score);
+        // void grow(int score); // 移除私有声明
         void move();
 
         void checkOutOfWindow();
@@ -43,7 +54,7 @@ namespace sfSnake
         template <typename T>
         void renderNode(sf::Vector2f &nowPosition, T &shape, sf::RenderWindow &window, int offset);
 
-        SnakePathNode toWindow(SnakePathNode node);
+        SnakePathNode toWindow(SnakePathNode node) const;
         bool hitSelf_;
         bool speedup_;
 
@@ -67,5 +78,9 @@ namespace sfSnake
 
         sf::SoundBuffer dieBuffer_;
         sf::Sound dieSound_;
+
+        // 子弹相关
+        std::vector<Bullet> bullets_;
+        float bulletTimer_ = 0.f;
     };
 }

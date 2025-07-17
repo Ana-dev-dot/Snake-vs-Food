@@ -35,10 +35,11 @@ namespace sfSnake
             static const sf::Color Yellow;
             static const sf::Color Green;
             static const sf::Color Red;
+            static const sf::Color Orange;
             static const sf::Color Background[3];
             static const sf::Color Grid[3];
             static const sf::Color NotSeleted;
-            static const sf::Color Fruit[5];
+            static const sf::Color Fruit[6]1
         };
 
         static sf::VideoMode initVideoMode_();

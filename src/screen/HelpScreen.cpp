@@ -19,9 +19,7 @@ HelpScreen::HelpScreen()
         sf::String(L"游戏中，按[w/a/s/d]或者[上下左右]键切换方向\n") +
         sf::String(L"长按空格加速\n") +
         sf::String(L"或者点击、长按鼠标（左键或右键），指引蛇的移动\n") +
-        sf::String(L"屏幕上有5种不同颜色的水果，它们分别对应于得分：\n") +
-        sf::String(L"黑色、棕色（不得分），红色（3分），蓝色（2分），绿色（1分）\n") +
-        sf::String(L"点击设置按钮，设置网格开关、网格颜色、背景颜色"));
+        sf::String(L"利用你的身法走位以及智慧，打败反击的食物吧！"));
     text_.setCharacterSize(Game::GlobalVideoMode.width / 35.0f);
     text_.setFillColor(Game::Color::Green);
     setOriginMiddle(text_);

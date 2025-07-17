@@ -4,7 +4,7 @@ CXX=g++
 CC_FLAGS=-g -static -Wall -DSFML_STATIC
 CXX_FLAGS=-g -static -std=c++17 -Wall -O2 -DSFML_STATIC
 
-TARGET=sfSnakePro
+TARGET=Snake-vs-Food
 BUILD_DIR=build
 SRC_DIR= src src/screen src/element
 SRCS = $(foreach dir, $(SRC_DIR), $(wildcard $(dir)/*.cpp))

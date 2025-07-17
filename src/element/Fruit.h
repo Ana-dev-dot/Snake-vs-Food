@@ -9,8 +9,12 @@ namespace sfSnake
         sf::CircleShape shape_;
         int score_;
 
-        Fruit(sf::Vector2f position, sf::Color color, int score);
+        int ftype_;
+
+        Fruit(sf::Vector2f position, sf::Color color, int score, int type);
 
         void render(sf::RenderWindow &window);
+
+        int getftype();
     };
 }

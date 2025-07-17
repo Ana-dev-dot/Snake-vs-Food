@@ -6,10 +6,14 @@
 #include "element/Snake.h"
 #include "Game.h"
 #include "element/Fruit.h"
+#include "element/Bullet.h"
 
 #include "screen/GameOverScreen.h"
 
 using namespace sfSnake;
+
+// 子弹发射冷却时间（秒）
+const float BulletCooldown = 0.8f;
 
 const int Snake::InitialSize = 5;
 
@@ -23,12 +27,13 @@ Snake::Snake()
       nodeMiddle(sf::Vector2f(nodeRadius_ * std::sqrt(3), nodeRadius_)),
       score_(InitialSize),
       hp_(InitialSize)
+      , bulletTimer_(0.f)
 {
     initNodes();
 
-    nodeShape.setFillColor(sf::Color(0xf1c40fff));
 
-    nodeMiddle.setFillColor(sf::Color(0x1c2833ff));
+    nodeShape.setFillColor(sf::Color::White);
+    nodeMiddle.setFillColor(sf::Color::White);
 
     setOriginMiddle(nodeShape);
     setOriginMiddle(nodeMiddle);
@@ -128,6 +133,23 @@ void Snake::update(sf::Time delta)
         count -= 40;
     }
     checkSelfCollisions();
+
+    // 子弹冷却计时
+    bulletTimer_ += delta.asSeconds();
+    if (bulletTimer_ >= BulletCooldown) {
+        fireBullet();
+        bulletTimer_ = 0.f;
+    }
+
+    // 更新所有子弹
+    for (auto it = bullets_.begin(); it != bullets_.end(); ) {
+        it->update(delta.asSeconds());
+        // 超出窗口则移除
+        if (it->isOutOfBounds(Game::GlobalVideoMode.width, Game::GlobalVideoMode.height))
+            it = bullets_.erase(it);
+        else
+            ++it;
+    }
 }
 
 void Snake::checkFruitCollisions(std::deque<Fruit> &fruits)
@@ -147,8 +169,41 @@ void Snake::checkFruitCollisions(std::deque<Fruit> &fruits)
     {
         pickupSound_.play();
         grow(toRemove->score_);
-        fruits.erase(toRemove);
+        
+
+        switch(toRemove->getftype()){//根据吃的果实改变蛇的颜色
+        case 0://火焰效果
+            nodeShape.setFillColor(sf::Color(0xff0000ff));
+            nodeMiddle.setFillColor(sf::Color(0xff0000ff));
+            break;
+        case 1://冰霜
+            nodeShape.setFillColor(sf::Color(0x0000ffff));
+            nodeMiddle.setFillColor(sf::Color(0x0000ffff));
+            break;
+        case 2://闪电
+            nodeShape.setFillColor(sf::Color(0xf1c40fff));
+            nodeMiddle.setFillColor(sf::Color(0xf1c40fff));
+            break;
+        case 3://鬼魂
+            nodeShape.setFillColor(sf::Color(0x9b59b680));
+            nodeMiddle.setFillColor(sf::Color(0x9b59b680));
+            break;
+        case 4://暗黑
+            nodeShape.setFillColor(sf::Color(0x000000ff));
+            nodeMiddle.setFillColor(sf::Color(0x000000ff));
+            break;
+        case 5://普通
+            nodeShape.setFillColor(sf::Color::White);
+            nodeMiddle.setFillColor(sf::Color::White);
+            break;
+        default:
+            break;
+        }
+
+    fruits.erase(toRemove);
     }
+
+    
 }
 
 void Snake::grow(int score)
@@ -237,7 +292,7 @@ void Snake::checkOutOfWindow()
     }
 }
 
-SnakePathNode Snake::toWindow(SnakePathNode node)
+SnakePathNode Snake::toWindow(SnakePathNode node) const
 {
     while (node.x < 0)
         node.x = node.x + Game::GlobalVideoMode.width;
@@ -301,6 +356,20 @@ void Snake::render(sf::RenderWindow &window)
             }
         }
     }
+
+    // 渲染所有子弹
+    for (auto& b : bullets_)
+        b.render(window);
+}
+
+// 发射子弹：从蛇头位置，朝当前方向
+void Snake::fireBullet() {
+    SnakePathNode head = path_.front();
+    sf::Vector2f pos = toWindow(head);
+    sf::Vector2f dir = direction_;
+    float speed = 200.f; // 可调
+    int damage = 25; // 修改子弹伤害为25，确保一发击杀
+    bullets_.emplace_back(pos, dir, speed, damage, BulletType::Player);
 }
 
 template <typename T>
